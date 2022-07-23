@@ -1,6 +1,7 @@
 <?php
-namespace KanbanBoard;
-use KanbanBoard\Utilities;
+namespace App\KanbanBoard;
+
+use App\KanbanBoard\Utilities;
 
 class Authentication {
 
@@ -24,8 +25,7 @@ class Authentication {
 		$token = NULL;
 		if(array_key_exists('gh-token', $_SESSION)) {
 			$token = $_SESSION['gh-token'];
-		}
-		else if(Utilities::hasValue($_GET, 'code')
+		} else if(Utilities::hasValue($_GET, 'code')
 			&& Utilities::hasValue($_GET, 'state')
 			&& $_SESSION['redirected'])
 		{
