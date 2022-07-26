@@ -2,10 +2,10 @@
 
 namespace App\KanbanBoard;
 
-use Github\Client as GithubClient;
+use Github\Client as Client;
 use Github\HttpClient\CachedHttpClient;
 
-class GithubRepository
+class GithubClient
 {
     private $client;
     private $milestone_api;
@@ -14,7 +14,7 @@ class GithubRepository
     public function __construct($token, $account)
     {
         $this->account = $account;
-        $this->client = new GithubClient(new CachedHttpClient(array('cache_dir' => '/tmp/github-api-cache')));
+        $this->client = new Client(new CachedHttpClient(array('cache_dir' => '/tmp/github-api-cache')));
         $this->client->authenticate($token, GithubClient::AUTH_HTTP_TOKEN);
         $this->milestone_api = $this->client->api('issues')->milestones();
     }

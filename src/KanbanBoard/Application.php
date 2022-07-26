@@ -5,6 +5,11 @@ use Michelf\Markdown;
 
 class Application {
 
+    protected $github;
+    protected $repositories;
+    public $paused_labels;
+
+
 	public function __construct($github, $repositories, $paused_labels = array())
 	{
 		$this->github = $github;
@@ -17,12 +22,14 @@ class Application {
 		$ms = array();
 		foreach ($this->repositories as $repository)
 		{
-			foreach ($this->github->milestones($repository) as $data)
+            $allMsApiData = $this->github->api('issue')->milestones()->all(Utilities::env('GH_ACCOUNT'),$repository);
+            foreach($allMsApiData as $data)
 			{
 				$ms[$data['title']] = $data;
 				$ms[$data['title']]['repository'] = $repository;
 			}
 		}
+        var_dump($ms);die();
 		ksort($ms);
 		foreach ($ms as $name => $data)
 		{

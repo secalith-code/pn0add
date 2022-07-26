@@ -7,10 +7,11 @@
 	"require": {
 		"mustache/mustache": "^2.9",
 		"vierbergenlars/php-semver": "^3.0",
-		"knplabs/github-api": "^1.5",
+		"knplabs/github-api": "^3.0",
 		"michelf/php-markdown": "^1.6",
 		"phpunit/phpunit": "5.0.*",
-		"symfony/dotenv": "6.2.x-dev"
+		"symfony/dotenv": "6.2.x-dev",
+		"guzzlehttp/guzzle": "7.4.x-dev"
 	},
 	"minimum-stability": "dev"
 }
