@@ -2,23 +2,33 @@
 {{#issues}}
     <div style="display:inline-block;margin:20px;border:1px solid gray;padding:20px;">
         <h2>Queued</h2>
-        {{#open.length}}
+        {{#queued.length}}
             <ul>
-            {{#open.data}}
+            {{#queued.data}}
                 <li><b>{{title}}</b></li>
-            {{/open.data}}
+            {{/queued.data}}
             </ul>
-        {{/open.length}}
+        {{/queued.length}}
     </div>
     <div style="display:inline-block;margin:20px;border:1px solid gray;padding:20px;">
-        <h2>Closed</h2>
-        {{#closed.length}}
+        <h2>Active</h2>
+        {{#active.length}}
             <ul>
-            {{#closed.data}}
+            {{#active.data}}
                 <li><b>{{title}}</b></li>
-            {{/closed.data}}
+            {{/active.data}}
             </ul>
-        {{/closed.length}}
+        {{/active.length}}
+    </div>
+    <div style="display:inline-block;margin:20px;border:1px solid gray;padding:20px;">
+        <h2>Completed</h2>
+        {{#completed.length}}
+            <ul>
+            {{#completed.data}}
+                <li><b>{{title}}</b></li>
+            {{/completed.data}}
+            </ul>
+        {{/completed.length}}
     </div>
 {{/issues}}
 </div>
