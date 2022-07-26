@@ -112,7 +112,14 @@ class Application {
 
     protected function isIssuePaused($issueLabels)
     {
+        foreach($issueLabels as $issueLabel) {
+            if(in_array($issueLabel['name'],$this->paused_labels)) {
+                return true;
+            }
+        }
+
         return false;
+        $r=[];
     }
 
 	protected function issues($repository, $milestone_id)
@@ -140,16 +147,6 @@ class Application {
 		});
 		return $issues;
 	}
-//
-//	private static function _state($issue)
-//	{
-//		if ($issue['state'] === 'closed')
-//			return 'completed';
-//		else if (Utilities::hasValue($issue, 'assignee') && count($issue['assignee']) > 0)
-//			return 'active';
-//		else
-//			return 'queued';
-//	}
 
 //	private static function labels_match($issue, $needles)
 //	{

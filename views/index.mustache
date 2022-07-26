@@ -1,34 +1,33 @@
-<div>
-{{#issues}}
-    <div style="display:inline-block;margin:20px;border:1px solid gray;padding:20px;">
-        <h2>Queued</h2>
-        {{#queued.length}}
-            <ul>
-            {{#queued.data}}
-                <li><b>{{title}}</b></li>
-            {{/queued.data}}
-            </ul>
-        {{/queued.length}}
-    </div>
-    <div style="display:inline-block;margin:20px;border:1px solid gray;padding:20px;">
-        <h2>Active</h2>
-        {{#active.length}}
-            <ul>
-            {{#active.data}}
-                <li><b>{{title}}</b></li>
-            {{/active.data}}
-            </ul>
-        {{/active.length}}
-    </div>
-    <div style="display:inline-block;margin:20px;border:1px solid gray;padding:20px;">
-        <h2>Completed</h2>
-        {{#completed.length}}
-            <ul>
-            {{#completed.data}}
-                <li><b>{{title}}</b></li>
-            {{/completed.data}}
-            </ul>
-        {{/completed.length}}
-    </div>
-{{/issues}}
-</div>
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <title>Simple Kanban Board Application</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+        <style>
+            .bd-placeholder-img {
+                font-size: 1.125rem;
+                text-anchor: middle;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+            }
+        </style>
+    </head>
+    <body class="py-4">
+
+        <main>
+            <div class="container">
+                <h1>Simple Kanban Board Application</h1>
+                <p class="lead">Description.</p>
+                <div class="row mb-3 text-center">
+                    {{#issues}}
+                        {{> swimlanes}}
+                    {{/issues}}
+                </div>
+        </main>
+    </body>
+</html>
