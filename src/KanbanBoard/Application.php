@@ -22,7 +22,9 @@ class Application {
         $data=[];
         if( ! empty($this->repositories)) {
             foreach ($this->repositories as $repositoryName) {
+
                 $milestones = $this->getMilestonesByRepo($repositoryName);
+
                 if( ! empty($milestones)) {
                     foreach($milestones as $ms) {
                         $issues = $this->getIssuesByRepoAndMilestone($repositoryName,$ms['number']);
