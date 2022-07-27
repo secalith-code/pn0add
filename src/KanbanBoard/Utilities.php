@@ -96,6 +96,7 @@ class Utilities
                 'title' => $issue['title'],
                 'body' => trim(Markdown::defaultTransform(strip_tags(trim(nl2br($issue['body'],false))))),
                 'url' => $issue['html_url'],
+                'user_avatar'=>$issue['user']['avatar_url'],
                 'progress' => self::calcProgress(
                     substr_count(strtolower($issue['body']), '[x]'),
                     substr_count(strtolower($issue['body']), '[ ]')
