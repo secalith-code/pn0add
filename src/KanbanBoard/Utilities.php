@@ -16,7 +16,7 @@ class Utilities
                 return $default;
             } else {
                 throw new Exception(
-                    sprtinf(
+                    sprintf(
                         "Environment variable %s not found or has no value",
                         $name
                     )
