@@ -1,0 +1,6 @@
+.idea
+var/log/*
+!var/log/.gitignore
+vendor
+.env
+tests
