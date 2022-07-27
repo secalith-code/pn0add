@@ -16,24 +16,23 @@ $dotenv = new Dotenv();
 $dotenv->load(__DIR__.'/../.env');
 
 $privateKey = openssl_pkey_get_private(
-    file_get_contents(
-        Utilities::env('GH_PEMKEY')
-    ),
+    file_get_contents(Utilities::env('GH_PEMKEY')),
     Utilities::env('GH_PEMKEY_PASSPHRASE')
 );
 
-$publicKey = openssl_pkey_get_details($privateKey)['key'];
-
 $payload = [
     'iss' => Utilities::env('GH_APP_ID'),
-    'iat' => time()-60,
-    'exp' => time() + (10*60)
+    'iat' => time()-10,
+    'exp' => time()+(10*60)
 ];
 
-$token = JWT::encode($payload, $privateKey, 'RS256');
+$jwt = JWT::encode($payload, $privateKey, 'RS256');
+
+$publicKey = openssl_pkey_get_details($privateKey)['key'];
 
 $github = new ApiClient();
-$github->authenticate(Utilities::env('GH_TOKEN'),AuthMethod::JWT);
+
+$github->authenticate(Utilities::env('GH_TOKEN'),$jwt,AuthMethod::JWT);
 
 $repositories = explode('|', Utilities::env('GH_REPOSITORIES'));
 
