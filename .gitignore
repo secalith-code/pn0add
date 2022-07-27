@@ -3,3 +3,4 @@ var/log/*
 !var/log/.gitignore
 vendor
 .env
+var/pem/*.pem
