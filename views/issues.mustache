@@ -1,0 +1,59 @@
+<div class="row">
+    <div class="col-4">
+        <div class="text-start border border-1 h-100">
+            <h2 class="text-center m-0 py-2">Queued</h2>
+            <hr class="divider m-0 m-0" />
+            {{#queued.data}}
+            <ul class="list-group list-group-flush">
+                {{> single-issue }}
+            </ul>
+            {{/queued.data}}
+            {{^queued.data}}
+                <p class="text-muted px-3 py-2 text-center m-0">No issues</p>
+            {{/queued.data}}
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="text-start border border-1 h-100">
+            <h2 class="text-center m-0 py-2">Active</h2>
+            <hr class="divider m-0 m-0" />
+            {{#active.length}}
+                {{#active.data}}
+                <ul class="list-group list-group-flush">
+                    {{> single-issue }}
+<!--                <li class="list-group-item {{#paused}}list-group-item-danger{{/paused}}">-->
+<!--                    <a href="{{url}}" class="position-relative" target="_blank">{{title}}</a>-->
+<!--                    {{#body}}-->
+<!--                        <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIssue{{id}}" aria-expanded="false" aria-controls="collapseIssue{{id}}">-->
+<!--                            description-->
+<!--                        </button>-->
+<!--                        <div class="collapse" id="collapseIssue{{id}}">-->
+<!--                            {{{body}}}-->
+<!--                        </div>-->
+<!--                    {{/body}}-->
+<!--                </li>-->
+                </ul>
+                {{/active.data}}
+            {{/active.length}}
+            {{^active.data}}
+                <p class="text-muted px-3 py-2 text-center m-0">No issues</p>
+            {{/active.data}}
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="text-start border border-1 h-100">
+            <h2 class="text-center m-0 p-2">Completed</h2>
+            <hr class="divider m-0 m-0" />
+            {{#completed.length}}
+                {{#completed.data}}
+                    <ul class="list-group list-group-flush">
+                        {{> single-issue }}
+                    </ul>
+                {{/completed.data}}
+            {{/completed.length}}
+            {{^completed.data}}
+                <p class="text-muted px-3 py-2 text-center m-0">No issues</p>
+            {{/completed.data}}
+        </div>
+    </div>
+</div>

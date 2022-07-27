@@ -1,0 +1,14 @@
+<li class="list-group-item{{#state}}{{#paused}} list-group-item-danger{{/paused}}{{/state}}">
+    <a href="{{url}}" target="_blank">{{title}}</a>
+    {{#progress}}
+        <span class="badge bg-success">{{percent}}%</span>
+    {{/progress}}
+    {{#body}}
+        <button class="btn btn-secondary btn-sm float-end" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIssue{{id}}" aria-expanded="false" aria-controls="collapseIssue{{id}}">
+            <i class="bi bi-card-text"></i>
+        </button>
+        <div class="collapse" id="collapseIssue{{id}}">
+            {{{body}}}
+        </div>
+    {{/body}}
+</li>

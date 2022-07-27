@@ -1,0 +1,19 @@
+<div class="card mb-5 border-0">
+    <div class="card-header border rounded-0">
+        <a href="{{data.url}}" target="_blank">
+            <span>{{data.title}}</span>
+            <i class="bi bi-box-arrow-up-right ms-2"></i>
+        </a>
+    </div>
+    {{#data.progress}}
+        <div class="progress my-2 rounded-0">
+            <div class="progress-bar" role="progressbar" aria-valuenow="{{data.progress.percent}}" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: {{data.progress.percent}}%;">{{data.progress.percent}}%</div>
+        </div>
+    {{/data.progress}}
+    {{#issues}}
+        {{> issues}}
+    {{/issues}}
+    {{^issues}}
+        <p class="text-muted px-3 py-2 text-center m-0">No issues at all</p>
+    {{/issues}}
+</div>

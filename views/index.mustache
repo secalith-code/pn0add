@@ -7,27 +7,16 @@
         <title>Simple Kanban Board Application</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
-        <style>
-            .bd-placeholder-img {
-                font-size: 1.125rem;
-                text-anchor: middle;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                user-select: none;
-            }
-        </style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     </head>
     <body class="py-4">
-
         <main>
             <div class="container">
                 <h1>Simple Kanban Board Application</h1>
                 <p class="lead">Description.</p>
-                <div class="row mb-3 text-center">
-                    {{#issues}}
-                        {{> swimlanes}}
-                    {{/issues}}
-                </div>
+                {{#milestones}}
+                    {{> milestone}}
+                {{/milestones}}
         </main>
     </body>
 </html>
