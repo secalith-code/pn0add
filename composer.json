@@ -5,6 +5,8 @@
 		}
 	},
 	"require": {
+		"ext-curl": "*",
+		"ext-dom": "*",
 		"firebase/php-jwt": "dev-main",
 		"guzzlehttp/guzzle": "^7.4",
 		"knplabs/github-api": "^3.0",
