@@ -32,7 +32,7 @@ class GithubClient implements ClientInterface
         $this->account = $account;
 
         $this->client = new Client();
-        $this->client->authenticate($token, $password, $method);
+        $this->client->authenticate($token, $method);
 
         $this->issuesApi = $this->client->api('issues');
 

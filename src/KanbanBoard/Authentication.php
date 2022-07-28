@@ -75,7 +75,7 @@ class Authentication
     private function getJWTPayload(): array
     {
         return [
-            'iss' => Utilities::env('GH_APP_ID'),
+            'iss' => Utilities::env('GH_CLIENT_ID'),
             'iat' => time() - 10,
             'exp' => time() + (10 * 60)
         ];
@@ -122,7 +122,7 @@ class Authentication
     private function redirectToGithub(): void
     {
         $url = 'Location: https://github.com/login/oauth/authorize';
-        $url .= '?client_id=' . $this->clientId;
+        $url .= '?client_id=' . Utilities::env("GH_OAUTH_CLIENT_ID");
         $url .= '&scope=repo';
         $url .= '&state=LKHYgbn776tgubkjhk';
         header($url);
@@ -140,8 +140,8 @@ class Authentication
         $data = array(
             'code' => $code,
             'state' => 'LKHYgbn776tgubkjhk',
-            'client_id' => $this->clientId,
-            'client_secret' => $this->clientSecret);
+            'client_id' => Utilities::env("GH_OAUTH_CLIENT_ID"),
+            'client_secret' => Utilities::env("GH_OAUTH_CLIENT_SECRET"));
         $options = array(
             'http' => array(
                 'method' => 'POST',
