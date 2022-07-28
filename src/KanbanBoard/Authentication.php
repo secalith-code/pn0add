@@ -122,7 +122,7 @@ class Authentication
     private function redirectToGithub(): void
     {
         $url = 'Location: https://github.com/login/oauth/authorize';
-        $url .= '?client_id=' . $this->client_id;
+        $url .= '?client_id=' . $this->clientId;
         $url .= '&scope=repo';
         $url .= '&state=LKHYgbn776tgubkjhk';
         header($url);
@@ -137,20 +137,18 @@ class Authentication
     private function returnsFromGithub($code): mixed
     {
         $url = 'https://github.com/login/oauth/access_token';
-        $data = [
+        $data = array(
             'code' => $code,
             'state' => 'LKHYgbn776tgubkjhk',
-            'client_id' => $this->client_id,
-            'client_secret' => $this->client_secret,
-        ];
-        $options = [
-            'http' => [
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret);
+        $options = array(
+            'http' => array(
                 'method' => 'POST',
                 'header' => "Content-type: application/x-www-form-urlencoded\r\n",
                 'content' => http_build_query($data),
-            ],
-        ];
-
+            ),
+        );
         $context = stream_context_create($options);
         $result = file_get_contents($url, false, $context);
 

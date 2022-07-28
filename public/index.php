@@ -18,6 +18,8 @@ $container = $containerBuilder->build();
 
 $authenticate = $container->get('Authentication');
 
+// $authenticate->login();
+
 $jwt = $authenticate->getJWT();
 
 $client = new GithubClient(
