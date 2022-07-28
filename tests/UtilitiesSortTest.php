@@ -7,7 +7,7 @@ use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Dotenv\Dotenv;
-use App\KanbanBoard\Utilities;
+use App\Utilities;
 
 final class UtilitiesSortTest extends TestCase
 {

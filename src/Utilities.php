@@ -5,10 +5,17 @@ namespace App;
 use Exception;
 use InvalidArgumentException;
 use Michelf\Markdown;
+use Symfony\Component\Dotenv\Dotenv;
 
 class Utilities
 {
     public static string $sortBy;
+
+    public static function loadEnv(string $envFile): void
+    {
+        $dotenv = new Dotenv();
+        $dotenv->load($envFile);
+    }
 
     /**
      * @param string               $name
@@ -38,8 +45,16 @@ class Utilities
         return null;
     }
 
+    /**
+     * @param array    $data
+     * @param mixed    $sortBy
+     * @param int|null $sortOrder
+     *
+     * @return array
+     */
     public static function sortArrayByKey(array $data, mixed $sortBy, ?int $sortOrder = SORT_ASC): array
     {
+        // So it will be accessible in anonymous function.
         self::$sortBy = $sortBy;
 
         if ($sortOrder === SORT_ASC) {

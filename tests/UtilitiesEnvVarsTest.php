@@ -2,7 +2,7 @@
 
 namespace App\PhpTests;
 
-use App\KanbanBoard\Utilities;
+use App\Utilities;
 use ArgumentCountError;
 use Exception;
 use InvalidArgumentException;

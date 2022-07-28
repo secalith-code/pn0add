@@ -2,14 +2,16 @@
 
 namespace App\KanbanBoard;
 
-use Github\Client as ApiClient;
+use Github\Client;
 use Michelf\Markdown;
+use Mustache_Engine;
+use Mustache_Loader_FilesystemLoader;
 
 class Application
 {
     protected ClientInterface $client;
 
-    protected ApiClient $github;
+    protected Client $github;
 
     public ?array $paused_labels;
 
@@ -39,6 +41,7 @@ class Application
 
         if (! empty($this->repositories)) {
             foreach ($this->repositories as $repositoryName) {
+
                 $milestones = $this->client->getMilestones($repositoryName);
 
                 if (! empty($milestones)) {
@@ -58,5 +61,20 @@ class Application
         }
 
         return ['milestones' => $data];
+    }
+
+    /**
+     * @param $template
+     * @param $data
+     *
+     * @return string
+     */
+    public function display($template, $data): string
+    {
+        $m = new Mustache_Engine([
+            'loader' => new Mustache_Loader_FilesystemLoader('../views'),
+        ]);
+
+        echo $m->render($template, $data);
     }
 }
