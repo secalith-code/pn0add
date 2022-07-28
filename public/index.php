@@ -4,6 +4,7 @@ use App\KanbanBoard\Application;
 use App\KanbanBoard\Authentication;
 use App\KanbanBoard\GithubClient;
 use App\Utilities;
+use DI\ContainerBuilder;
 use Github\AuthMethod;
 use Github\Client as ApiClient;
 
@@ -11,10 +12,14 @@ require __DIR__ . '/../vendor/autoload.php';
 
 Utilities::loadEnv(__DIR__ . '/../.env');
 
+$containerBuilder = new ContainerBuilder();
+$containerBuilder->addDefinitions(__DIR__ . '/../config/di.php');
+$container = $containerBuilder->build();
+
 $authenticate = new Authentication(
     Utilities::env('GH_CLIENT_ID'),
     Utilities::env('GH_CLIENT_SECRET'),
-    'RS256'
+    Utilities::env('GH_ALG')
 );
 
 $jwt=$authenticate->getJWT();
