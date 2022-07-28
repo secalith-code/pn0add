@@ -15,20 +15,12 @@ require __DIR__ . '/../vendor/autoload.php';
 $dotenv = new Dotenv();
 $dotenv->load(__DIR__.'/../.env');
 
-$privateKey = openssl_pkey_get_private(
-    file_get_contents(Utilities::env('GH_PEMKEY')),
-    Utilities::env('GH_PEMKEY_PASSPHRASE')
+$authenticate = new Authentication(
+    Utilities::env('GH_CLIENT_ID'),
+    Utilities::env('GH_CLIENT_SECRET'),
+    'RS256'
 );
-
-$payload = [
-    'iss' => Utilities::env('GH_APP_ID'),
-    'iat' => time()-10,
-    'exp' => time()+(10*60)
-];
-
-$jwt = JWT::encode($payload, $privateKey, 'RS256');
-
-$publicKey = openssl_pkey_get_details($privateKey)['key'];
+$jwt=$authenticate->getJWT();
 
 $github = new ApiClient();
 

@@ -2,17 +2,44 @@
 namespace App\KanbanBoard;
 
 use App\KanbanBoard\Utilities;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use OpenSSLAsymmetricKey;
 
 class Authentication {
 
-	private $client_id = NULL;
-	private $client_secret = NULL;
+	private string $clientId;
+	private string $clientSecret;
+    private ?string $alg;
 
-	public function __construct()
+	public function __construct(string $clientId, string $clientSecret, ?string $alg)
 	{
-		$this->client_id = Utilities::env('GH_CLIENT_ID');
-		$this->client_secret = Utilities::env('GH_CLIENT_SECRET');
+		$this->clientId = $clientId;
+		$this->clientSecret = $clientSecret;
+        $this->alg = $alg;
 	}
+
+    public function getPrivateKey(): OpenSSLAsymmetricKey
+    {
+        return openssl_pkey_get_private(
+            file_get_contents(Utilities::env('GH_PEMKEY')),
+            Utilities::env('GH_PEMKEY_PASSPHRASE')
+        );
+    }
+
+    public function getJWT(): string
+    {
+        return JWT::encode($this->getJWTPayload(), $this->getPrivateKey(), $this->alg);
+    }
+
+    private function getJWTPayload(): array
+    {
+        return [
+            'iss' => Utilities::env('GH_APP_ID'),
+            'iat' => time()-10,
+            'exp' => time()+(10*60)
+        ];
+    }
 
 	public function logout()
 	{
