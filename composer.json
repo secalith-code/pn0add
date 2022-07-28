@@ -14,7 +14,8 @@
 		"mustache/mustache": "^2.9",
 		"symfony/dotenv": "^6.0",
 		"vierbergenlars/php-semver": "^3.0",
-		"php-di/php-di": "^6.4"
+		"php-di/php-di": "^6.4",
+		"lcobucci/jwt": "^4.1"
 	},
 	"minimum-stability": "dev",
 	"prefer-stable" : true,

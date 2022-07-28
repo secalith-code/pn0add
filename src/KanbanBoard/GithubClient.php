@@ -22,22 +22,32 @@ class GithubClient implements ClientInterface
     private MilestoneModel $milestoneModel;
 
     /**
-     * @param $token
-     * @param $password
-     * @param $method
-     * @param $account
+     * @param        $tokenOrLogin
+     * @param        $password
+     * @param        $authMethod
+     * @param string $account
      */
-    public function __construct($token, $password, $method = null, $account = null)
+    public function __construct(
+        $tokenOrLogin,
+        $password = null,
+        $authMethod,
+        string $account
+    )
     {
         $this->account = $account;
 
         $this->client = new Client();
-        $this->client->authenticate($token, $method);
+        $this->client->authenticate($tokenOrLogin, $password, $authMethod);
 
         $this->issuesApi = $this->client->api('issues');
 
         $this->milestoneModel = new MilestoneModel();
         $this->issueModel = new IssueModel();
+    }
+
+    public function getClient()
+    {
+        return $this->client;
     }
 
     /**
