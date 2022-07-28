@@ -31,9 +31,9 @@ class GithubClient implements ClientInterface
      * Get data from API and hydrate the result
      *
      * @param string $repository
-     * @return array
+     * @return null|array
      */
-    public function getMilestones(string $repository): array
+    public function getMilestones(string $repository): ?array
     {
         $milestones = $this->issuesApi->milestones()->all($this->account, $repository);
 
@@ -45,15 +45,14 @@ class GithubClient implements ClientInterface
      *
      * @param string $repository
      * @param string $milestoneId
-     * @return array
+     * @return null|array
      */
-    public function getIssues(string $repository, string $milestoneId): array
+    public function getIssues(string $repository, string $milestoneId): ?array
     {
         $issueParams = array('milestone' => $milestoneId, 'state' => 'all');
         $issues = $this->issuesApi->all($this->account, $repository, $issueParams);
 
         $fetchedIssues = $this->issueModel->fetchAll($issues);
-
         $issuesByStatus = $this->issueModel->fetchIssuesByStatus($fetchedIssues);
 
         return $issuesByStatus;

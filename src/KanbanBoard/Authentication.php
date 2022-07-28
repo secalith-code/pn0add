@@ -5,6 +5,7 @@ use App\KanbanBoard\Utilities;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use OpenSSLAsymmetricKey;
+use Exception;
 
 class Authentication {
 
@@ -19,12 +20,24 @@ class Authentication {
         $this->alg = $alg;
 	}
 
+    /**
+     * @throws Exception
+     * @return OpenSSLAsymmetricKey
+     */
     public function getPrivateKey(): OpenSSLAsymmetricKey
     {
-        return openssl_pkey_get_private(
-            file_get_contents(Utilities::env('GH_PEMKEY')),
-            Utilities::env('GH_PEMKEY_PASSPHRASE')
-        );
+        try {
+            if( ! file_exists(Utilities::env('GH_PEMKEY'))) {
+                throw new Exception('your PEM file location is incorrect.');
+            }
+
+            return openssl_pkey_get_private(
+                file_get_contents(Utilities::env('GH_PEMKEY')),
+                Utilities::env('GH_PEMKEY_PASSPHRASE')
+            );
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
     }
 
     public function getJWT(): string
