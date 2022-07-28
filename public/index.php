@@ -25,8 +25,7 @@ $client = new GithubClient(
     Utilities::env('GH_TOKEN'),
     $jwt,
     AuthMethod::JWT,
-    Utilities::env('GH_ACCOUNT')
-);
+    Utilities::env('GH_ACCOUNT'));
 
 $github = new ApiClient();
 
