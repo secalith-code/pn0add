@@ -1,9 +1,19 @@
 <div class="card mb-5 border-0">
     <div class="card-header border rounded-0">
-        <a href="{{data.html_url}}" target="_blank">
-            <span>{{data.title}}</span>
-            <i class="bi bi-box-arrow-up-right ms-2"></i>
-        </a>
+        <h3 class="w-auto d-inline">
+            <a class="text-decoration-none text-dark" href="{{data.html_url}}" target="_blank">
+                <span>{{data.title}}</span>
+                <i class="bi bi-box-arrow-up-right ms-2"></i>
+            </a>
+        </h3>
+        {{#data.description}}
+            <button class="btn btn-secondary btn-sm float-end p-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMilestone{{data.number}}" aria-expanded="false" aria-controls="collapseMilestone{{data.number}}">
+                <i class="bi bi-card-text"></i>
+            </button>
+            <div class="collapse" id="collapseMilestone{{data.number}}">
+                <p class="my-2 bg-light">{{{data.description}}}</p>
+            </div>
+        {{/data.description}}
     </div>
     {{#data.progress}}
         <div class="progress my-2 rounded-0">
