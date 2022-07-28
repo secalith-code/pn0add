@@ -1,14 +1,12 @@
 <?php
 
 use App\KanbanBoard\Authentication;
-//use App\KanbanBoard\GithubClient;
+use App\KanbanBoard\GithubClient;
 use App\KanbanBoard\Utilities;
 use Github\AuthMethod;
 use Symfony\Component\Dotenv\Dotenv;
 use App\KanbanBoard\Application;
 use Github\Client as ApiClient;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -20,15 +18,23 @@ $authenticate = new Authentication(
     Utilities::env('GH_CLIENT_SECRET'),
     'RS256'
 );
+
 $jwt=$authenticate->getJWT();
+
+$client = new GithubClient(
+    Utilities::env('GH_TOKEN'),
+    $jwt,
+    AuthMethod::JWT,
+    Utilities::env('GH_ACCOUNT')
+);
 
 $github = new ApiClient();
 
-$github->authenticate(Utilities::env('GH_TOKEN'),$jwt,AuthMethod::JWT);
+$github->authenticate(Utilities::env('GH_TOKEN'), $jwt,AuthMethod::JWT);
 
 $repositories = explode('|', Utilities::env('GH_REPOSITORIES'));
 
-$app = new Application($github, $repositories, ['waiting-for-feedback','paused']);
+$app = new Application($client, $repositories, ['waiting-for-feedback','paused']);
 
 $board=$app->board();
 
