@@ -1,5 +1,7 @@
 <li class="list-group-item{{#state}}{{#paused}} list-group-item-danger{{/paused}}{{/state}}">
-    <img style="height:24px;" src="{{user_avatar}}" />
+    {{#assignee}}
+        <img style="height:24px;" src="{{avatar_url}}" />
+    {{/assignee}}
     <a href="{{html_url}}" target="_blank">{{title}}</a>
     {{#progress}}
         <span class="badge bg-success">{{percent}}%</span>
