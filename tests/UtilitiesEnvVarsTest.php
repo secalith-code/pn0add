@@ -2,13 +2,17 @@
 
 namespace App\PhpTests;
 
+use App\KanbanBoard\Utilities;
+use ArgumentCountError;
+use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Dotenv\Dotenv;
 
-final class EnvVarsTest extends TestCase
+final class UtilitiesEnvVarsTest extends TestCase
 {
 
-    public $envFilePath;
+    public ?string $envFilePath;
 
     protected function setUp(): void
     {
@@ -39,5 +43,22 @@ final class EnvVarsTest extends TestCase
         $this->assertTrue( ! empty($_SERVER['GH_CLIENT_SECRET']));
         $this->assertTrue( ! empty($_SERVER['GH_ACCOUNT']));
         $this->assertTrue( ! empty($_SERVER['GH_REPOSITORIES']));
+    }
+
+    public function testArgumentCountError()
+    {
+        $this->expectException(ArgumentCountError::class);
+
+        Utilities::env();
+    }
+
+    public function testNonExistentIndex()
+    {
+        $nonExistentIndex = 'NON_EXISTENT';
+
+        $errMessageResult = Utilities::env($nonExistentIndex);
+
+        $this->stringContains($nonExistentIndex);
+
     }
 }

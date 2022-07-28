@@ -21,8 +21,4 @@ final class AuthenticationTest extends TestCase
         $dotenv->load($this->envFilePath);
     }
 
-    public function testEnvFileExists()
-    {
-        $this->assertTrue( array_key_exists('gh-token',$_SESSION));
-    }
 }
