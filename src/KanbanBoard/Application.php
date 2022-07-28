@@ -3,7 +3,6 @@
 namespace App\KanbanBoard;
 
 use Github\Client;
-use Michelf\Markdown;
 use Mustache_Engine;
 use Mustache_Loader_FilesystemLoader;
 

@@ -4,7 +4,6 @@ namespace App\KanbanBoard;
 
 use App\KanbanBoard\CommonModel;
 use App\Utilities;
-use Michelf\Markdown;
 
 class IssueModel extends CommonModel
 {
