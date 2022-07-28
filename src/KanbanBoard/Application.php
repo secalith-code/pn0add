@@ -40,7 +40,6 @@ class Application
 
         if (! empty($this->repositories)) {
             foreach ($this->repositories as $repositoryName) {
-
                 $milestones = $this->client->getMilestones($repositoryName);
 
                 if (! empty($milestones)) {

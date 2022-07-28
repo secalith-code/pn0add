@@ -108,11 +108,14 @@ class Utilities
      * and add e target=_blank to html links
      *
      * @param string|null $markdown
+     * @param bool        $tranformLinksToBlankTarget
      *
-     * @return string
+     * @return string|null
      */
-    public static function fetchMarkdownToHTML(?string $markdown): ?string
-    {
+    public static function fetchMarkdownToHTML(
+        ?string $markdown,
+        bool $tranformLinksToBlankTarget = false
+    ): ?string {
         $markdown = trim($markdown);
         $markdown = nl2br($markdown);
         $markdown = Markdown::defaultTransform($markdown);
@@ -128,11 +131,11 @@ class Utilities
      */
     public static function addBlankTargetToHTMLLinks(?string $html): ?string
     {
-        if( ! empty($html)) {
+        if (! empty($html)) {
             $doc = new DOMDocument();
             $dom = $doc->loadHTML($html);
             // only if DOMDocument
-            if($dom) {
+            if ($dom) {
                 if ($doc->getElementsByTagName("a")->length > 0) {
                     foreach ($doc->getElementsByTagName('a') as $link) {
                         $link->setAttribute('target', '_blank');

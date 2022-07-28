@@ -40,5 +40,5 @@ abstract class CommonModel
      * @param  $item
      * @return array
      */
-    public abstract function fetchOne(array $item): array;
+    abstract public function fetchOne(array $item): array;
 }
