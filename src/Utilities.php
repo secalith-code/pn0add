@@ -101,4 +101,14 @@ class Utilities
 
         return null;
     }
+
+    /**
+     * @param string|null $markdown
+     *
+     * @return string
+     */
+    public static function fetchMarkdowmToHTML(?string $markdown): string
+    {
+
+    }
 }
