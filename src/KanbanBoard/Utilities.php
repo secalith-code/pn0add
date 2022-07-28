@@ -2,24 +2,29 @@
 namespace App\KanbanBoard;
 
 use Exception;
+use InvalidArgumentException;
 use Michelf\Markdown;
 
 class Utilities
 {
-    public static $sortBy;
+    public static string $sortBy;
 
-	public static function env($name, $default = NULL)
+    /**
+     * @param string $name
+     * @param bool|string|int|null $default
+     * @return mixed
+     */
+	public static function env(string $name, bool|string|int $default = null): mixed
     {
         try {
-            $value = getenv($name);
-            if( ! $value && isset($_SERVER[$name])) {
+            if(array_key_exists($name,$_SERVER)) {
                 return $_SERVER[$name];
-            } elseif($default !== NULL) {
+            } elseif ($default !== null) {
                 return $default;
             } else {
                 throw new Exception(
                     sprintf(
-                        "Environment variable %s not found or has no value",
+                        "Environment variable %s not found or has no value.",
                         $name
                     )
                 );
@@ -27,15 +32,14 @@ class Utilities
         } catch (Exception $e){
             echo $e->getMessage();
         }
+
+        return null;
     }
 
-	public static function hasValue($array, $key) {
-		return is_array($array) && array_key_exists($key, $array) && !empty($array[$key]);
-	}
-
-    public static function sortArrayByKey($data, $sortBy, ?int $sortOrder=SORT_ASC)
+    public static function sortArrayByKey(array $data, mixed $sortBy, ?int $sortOrder=SORT_ASC): array
     {
         self::$sortBy = $sortBy;
+
         if($sortOrder===SORT_ASC) {
             // sort ascending
             usort($data, function ($item1, $item2) {
