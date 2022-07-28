@@ -6,6 +6,8 @@ use Michelf\Markdown;
 
 class Utilities
 {
+    public static $sortBy;
+
 	public static function env($name, $default = NULL)
     {
         try {
@@ -16,7 +18,7 @@ class Utilities
                 return $default;
             } else {
                 throw new Exception(
-                    sprintf(
+                    sprtinf(
                         "Environment variable %s not found or has no value",
                         $name
                     )
@@ -30,6 +32,24 @@ class Utilities
 	public static function hasValue($array, $key) {
 		return is_array($array) && array_key_exists($key, $array) && !empty($array[$key]);
 	}
+
+    public static function sortArrayByKey($data, $sortBy, ?int $sortOrder=SORT_ASC)
+    {
+        self::$sortBy = $sortBy;
+        if($sortOrder===SORT_ASC) {
+            // sort ascending
+            usort($data, function ($item1, $item2) {
+                return $item1[self::$sortBy] <=> $item2[self::$sortBy];
+            });
+        } else {
+            // sort descending
+            usort($data, function ($item1, $item2) {
+                return $item2[self::$sortBy] <=> $item1[self::$sortBy];
+            });
+        }
+
+        return $data;
+    }
 
     public static function calcProgress($complete,$remaining): null|array
     {
@@ -48,74 +68,4 @@ class Utilities
         return null;
     }
 
-    /**
-     * Fetch
-     * Milestone may have no issues.
-     *
-     * @param array|null $issues
-     * @return array
-     */
-    public static function fetchIssuesByStatus(?array $issues): array
-    {
-        $data=[];
-        if( ! empty($issues)) {
-            foreach($issues as $issue) {
-                $state = self::getIssueState($issue);
-
-                $data[$state]['data'][]=Utilities::fetchIssue($issue);
-            }
-
-            if( ! empty($data)) {
-                foreach($data as $state=>$issues) {
-                    $data[$state]['length']=count($issues['data']);
-                }
-            }
-        }
-
-        return $data;
-    }
-
-    public static function getIssueState( array $issue): string
-    {
-        if ($issue['state']==='closed') {
-            $state='completed';
-        } elseif( ! empty($issue['assignee'])) {
-            $state='active';
-        } else {
-            $state='queued';
-        }
-
-        return $state;
-    }
-
-    public static function fetchIssue(array $issue): array
-    {
-        $data = [
-                'id' => $issue['id'],
-                'number' => $issue['number'],
-                'title' => $issue['title'],
-                'body' => trim(Markdown::defaultTransform(strip_tags(trim(nl2br($issue['body'],false))))),
-                'url' => $issue['html_url'],
-                'user_avatar'=>$issue['user']['avatar_url'],
-                'progress' => self::calcProgress(
-                    substr_count(strtolower($issue['body']), '[x]'),
-                    substr_count(strtolower($issue['body']), '[ ]')
-                ),
-                'paused' => self::isIssuePaused($issue['labels']),
-                'state' => $issue['state'],
-            ];
-
-        return $data;
-    }
-
-    protected static function isIssuePaused($issueLabels): bool
-    {
-        foreach($issueLabels as $issueLabel) {
-            if(in_array($issueLabel['name'],$issueLabels)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

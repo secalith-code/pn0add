@@ -29,13 +29,13 @@ class Application {
                 if( ! empty($milestones)) {
                     foreach($milestones as $ms) {
                         $issues = $this->client->getIssues($repositoryName,$ms['number']);
+
                         $data[] = [
                             'data'=>$ms,
-                            'issues'=>Utilities::fetchIssuesByStatus($issues)
+                            'issues'=>$issues,
                         ];
                     }
                 }
-
             }
         }
 
