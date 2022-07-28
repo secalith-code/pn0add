@@ -107,8 +107,8 @@ class Utilities
      *
      * @return string
      */
-    public static function fetchMarkdowmToHTML(?string $markdown): string
+    public static function fetchMarkdownToHTML(?string $markdown): ?string
     {
-
+        return $markdown;
     }
 }

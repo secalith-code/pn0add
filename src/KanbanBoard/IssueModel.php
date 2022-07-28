@@ -19,7 +19,7 @@ class IssueModel extends CommonModel
         return [
             'id' => (int) $item['id'],
             'title' => (string) $item['title'],
-            'body' => trim($item['body']),
+            'body' => Utilities::fetchMarkdownToHTML($item['body']),
             'html_url' => filter_var($item['html_url'], FILTER_SANITIZE_URL),
             'user_avatar' => $item['user']['avatar_url'],
             'progress' => Utilities::calcProgress(

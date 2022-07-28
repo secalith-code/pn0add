@@ -20,7 +20,7 @@ class MilestoneModel extends CommonModel
         return [
             'title' => (string) $item['title'],
             'number' => (int) $item['number'],
-            'description' => trim($item['description']),
+            'description' => Utilities::fetchMarkdownToHTML($item['description']),
             'open_issues' => (int) $item['open_issues'],
             'closed_issues' => (int) $item['closed_issues'],
             'html_url' => filter_var($item['html_url'], FILTER_SANITIZE_URL),
