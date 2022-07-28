@@ -17,16 +17,23 @@ class Authentication
 
     private string $clientSecret;
 
+    private JWT $JWT;
+
     /**
      * @param string      $clientId
      * @param string      $clientSecret
      * @param string|null $alg
      */
-    public function __construct(string $clientId, string $clientSecret, ?string $alg)
+    public function __construct(
+        string $clientId,
+        string $clientSecret,
+        ?string $alg,
+        ?JWT $jwt)
     {
-        $this->alg = $alg;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
+        $this->alg = $alg;
+        $this->JWT = $jwt;
     }
 
     /**
@@ -55,7 +62,7 @@ class Authentication
      */
     public function getJWT(): string
     {
-        return JWT::encode(
+        return $this->JWT::encode(
             $this->getJWTPayload(),
             $this->getPrivateKey(),
             $this->alg

@@ -16,13 +16,9 @@ $containerBuilder = new ContainerBuilder();
 $containerBuilder->addDefinitions(__DIR__ . '/../config/di.php');
 $container = $containerBuilder->build();
 
-$authenticate = new Authentication(
-    Utilities::env('GH_CLIENT_ID'),
-    Utilities::env('GH_CLIENT_SECRET'),
-    Utilities::env('GH_ALG')
-);
+$authenticate = $container->get('Authentication');
 
-$jwt=$authenticate->getJWT();
+$jwt = $authenticate->getJWT();
 
 $client = new GithubClient(
     Utilities::env('GH_TOKEN'),
