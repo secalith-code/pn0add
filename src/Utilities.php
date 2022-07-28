@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DOMDocument;
 use Exception;
 use InvalidArgumentException;
 use Michelf\Markdown;
@@ -103,12 +104,43 @@ class Utilities
     }
 
     /**
+     * Trim the text, convert newlines to <br />, transform markdown to html,
+     * and add e target=_blank to html links
+     *
      * @param string|null $markdown
      *
      * @return string
      */
     public static function fetchMarkdownToHTML(?string $markdown): ?string
     {
+        $markdown = trim($markdown);
+        $markdown = nl2br($markdown);
+        $markdown = Markdown::defaultTransform($markdown);
+        $markdown = self::addBlankTargetToHTMLLinks($markdown);
+
         return $markdown;
+    }
+
+    /**
+     * @param string|null $html
+     *
+     * @return string|null
+     */
+    public static function addBlankTargetToHTMLLinks(?string $html): ?string
+    {
+        if( ! empty($html)) {
+            $doc = new DOMDocument();
+            $dom = $doc->loadHTML($html);
+            // only if DOMDocument
+            if($dom) {
+                if ($doc->getElementsByTagName("a")->length > 0) {
+                    foreach ($doc->getElementsByTagName('a') as $link) {
+                        $link->setAttribute('target', '_blank');
+                    }
+                }
+            }
+        }
+
+        return $doc->saveHTML();
     }
 }
