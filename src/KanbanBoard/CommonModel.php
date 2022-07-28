@@ -7,7 +7,7 @@ use App\Utilities;
 /**
  *  Common functions for Issues and Milestones
  */
-class CommonModel
+abstract class CommonModel
 {
 
     /**
@@ -33,4 +33,12 @@ class CommonModel
 
         return null;
     }
+
+    /**
+     *  Hydrates Item data
+     *
+     * @param  $item
+     * @return array
+     */
+    public abstract function fetchOne(array $item): array;
 }
