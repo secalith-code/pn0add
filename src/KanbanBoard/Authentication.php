@@ -24,9 +24,9 @@ class Authentication
      */
     public function __construct(string $clientId, string $clientSecret, ?string $alg)
     {
-        $this->_alg = $alg;
-        $this->_clientId = $clientId;
-        $this->_clientSecret = $clientSecret;
+        $this->alg = $alg;
+        $this->clientId = $clientId;
+        $this->clientSecret = $clientSecret;
     }
 
     /**
