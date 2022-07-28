@@ -1,12 +1,12 @@
 <?php
 
+use App\KanbanBoard\Application;
 use App\KanbanBoard\Authentication;
 use App\KanbanBoard\GithubClient;
-use App\KanbanBoard\Utilities;
+use App\Utilities;
 use Github\AuthMethod;
-use Symfony\Component\Dotenv\Dotenv;
-use App\KanbanBoard\Application;
 use Github\Client as ApiClient;
+use Symfony\Component\Dotenv\Dotenv;
 
 require __DIR__ . '/../vendor/autoload.php';
 

@@ -5,14 +5,22 @@
 		}
 	},
 	"require": {
-		"mustache/mustache": "^2.9",
-		"vierbergenlars/php-semver": "^3.0",
+		"firebase/php-jwt": "dev-main",
+		"guzzlehttp/guzzle": "^7.4",
 		"knplabs/github-api": "^3.0",
 		"michelf/php-markdown": "^1.6",
-		"symfony/dotenv": "6.2.x-dev",
-		"guzzlehttp/guzzle": "7.4.x-dev",
-		"firebase/php-jwt": "dev-main",
+		"mustache/mustache": "^2.9",
+		"symfony/dotenv": "^6.0",
+		"vierbergenlars/php-semver": "^3.0"
+	},
+	"minimum-stability": "dev",
+	"prefer-stable" : true,
+	"require-dev": {
 		"phpunit/phpunit": "10.0.x-dev"
 	},
-	"minimum-stability": "dev"
+	"scripts": {
+		"start": "php -S localhost:8080 -t ./public",
+		"cs": "phpcs ./src/",
+		"bf": "phpcbf ./src/"
+	}
 }
