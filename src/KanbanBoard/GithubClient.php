@@ -55,7 +55,7 @@ class GithubClient implements ClientInterface
     }
 
     /**
-     *  Get data from API and hydrate the result
+     *  Get data from API or cache and hydrate the result
      *
      * @param string $repository
      *
@@ -63,13 +63,36 @@ class GithubClient implements ClientInterface
      */
     public function getMilestones(string $repository): ?array
     {
-        $milestones = $this->cacheClient->get($repository . '.milestones.fetch.all');
+        if($this->cacheClient) {
+            /** @var array $milestones  Try to reach data from cache */
+            $milestones=$this->getMilestonesCached($repository);
+        } else {
+            // Call API
+            $milestones = $this->issuesApi->milestones()->all($this->account, $repository);
+            /** @var array $milestones  Hydrated Milestones */
+            $milestones = $this->milestoneModel->fetchAll($milestones);
+        }
+
+        return $milestones;
+    }
+
+    /**
+     * @param string $repository
+     *
+     * @return array|null
+     */
+    protected function getMilestonesCached(string $repository): ?array
+    {
+        $cacheKey = $repository . '.milestones.fetch.all';
+        $milestones = $this->cacheClient->get($cacheKey);
 
         if (! $milestones) {
+            // Call API
             $milestones = $this->issuesApi->milestones()->all($this->account, $repository);
+            /** @var array $milestones  Hydrated Milestones */
             $milestones = $this->milestoneModel->fetchAll($milestones);
 
-            $this->cacheClient->set($repository . '.milestones.fetch.all', $milestones);
+            $this->cacheClient->set($cacheKey, $milestones);
         }
 
         return $milestones;
@@ -85,27 +108,40 @@ class GithubClient implements ClientInterface
      */
     public function getIssues(string $repository, int $milestoneId): ?array
     {
-        $cacheKey = $repository . '.milestone.' . $milestoneId . '.issues.fetch.all.by_status';
+        $issueParams = ['milestone' => $milestoneId, 'state' => 'all'];
 
-        $fetchByStatus = $this->cacheClient->get($cacheKey);
-
-        if (! $fetchByStatus) {
-            $issueParams = ['milestone' => $milestoneId, 'state' => 'all'];
-
+        if($this->cacheClient) {
+            /** @var array $milestones  Try to reach data from cache */
+            $issues=$this->getIssuesCached($repository, $milestoneId, $issueParams);
+        } else {
+            // Call API
             $issues = $this->issuesApi->all($this->account, $repository, $issueParams);
-
-            $fetchIssues = $this->issueModel->fetchAll($issues);
-            $fetchByStatus = $this->issueModel->fetchIssuesByStatus($fetchIssues);
-
-            $this->cacheClient->set($cacheKey, $fetchByStatus);
+            /** @var array $issues  Hydrate Issues */
+            $issues = $this->issueModel->fetchAll($issues);
+            // Fetch by status
+            $issues = $this->issueModel->fetchIssuesByStatus($issues);
         }
 
-        return $fetchByStatus;
+        return $issues;
     }
 
-    public function rateLimit()
+    protected function getIssuesCached(string $repository, int $milestoneId, ?array $issueParams): ?array
     {
-        var_dump($this->client->rateLimit());
-        return $this->client->rateLimit();
+        $cacheKey = $repository . '.milestone.' . $milestoneId . '.issues.fetch.all.by_status';
+
+        $issues = $this->cacheClient->get($cacheKey);
+
+        if (! $issues) {
+            // Call API
+            $issues = $this->issuesApi->all($this->account, $repository, $issueParams);
+            /** @var array $issues  Hydrate Issues */
+            $issues = $this->issueModel->fetchAll($issues);
+            // Fetch by status
+            $issues = $this->issueModel->fetchIssuesByStatus($issues);
+
+            $this->cacheClient->set($cacheKey, $issues);
+        }
+
+        return $issues;
     }
 }
