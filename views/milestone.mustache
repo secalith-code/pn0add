@@ -6,14 +6,16 @@
                 <i class="bi bi-box-arrow-up-right ms-2"></i>
             </a>
         </h3>
-        {{#data.description}}
-            <button class="btn btn-info border btn-sm float-end p-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMilestone{{data.number}}" aria-expanded="false" aria-controls="collapseMilestone{{data.number}}">
+        {{#data}}
+            {{#description}}
+            <button class="btn btn-info border btn-sm float-end p-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMilestone{{number}}" aria-expanded="false" aria-controls="collapseMilestone{{number}}">
                 <i class="bi bi-card-text"></i>
             </button>
-            <div class="collapse" id="collapseMilestone{{data.number}}">
-                <p class="my-2 bg-light">{{{data.description}}}</p>
+            <div class="collapse" id="collapseMilestone{{number}}">
+                <p class="my-2 bg-light">{{{description}}}</p>
             </div>
-        {{/data.description}}
+            {{/description}}
+        {{/data}}
     </div>
     {{#data.progress}}
         <div class="progress my-2 rounded-0">

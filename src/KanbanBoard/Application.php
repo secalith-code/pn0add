@@ -12,6 +12,8 @@ class Application
 
     protected Client $github;
 
+    protected $cacheClient;
+
     public ?array $paused_labels;
 
     protected array $repositories;
@@ -24,10 +26,12 @@ class Application
     public function __construct(
         ClientInterface $client,
         array $repositories,
+        $cacheClient = null,
         ?array $paused_labels = []
     ) {
         $this->client = $client;
         $this->repositories = $repositories;
+        $this->cacheClient = $cacheClient;
         $this->paused_labels = $paused_labels;
     }
 

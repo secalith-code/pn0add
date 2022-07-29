@@ -7,6 +7,9 @@ use App\Utilities;
 use DI\ContainerBuilder;
 use Github\AuthMethod;
 use Github\Client as Client;
+use Symfony\Component\Dotenv\Dotenv;
+
+use function DI\env as env;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -14,33 +17,34 @@ Utilities::loadEnv(__DIR__ . '/../.env');
 
 $containerBuilder = new ContainerBuilder();
 $containerBuilder->addDefinitions(__DIR__ . '/../config/di.php');
+$containerBuilder->enableCompilation(__DIR__ . '/../var/tmp');
+$containerBuilder->writeProxiesToFile(true, __DIR__ . '/../var/tmp/proxies');
 $container = $containerBuilder->build();
 
 /** @var \App\KanbanBoard\Authentication $authenticate */
 $authenticate = $container->get('Authentication');
+/** @var array $repositories */
+$repositories = $container->get('gh.repositories');
 
-// .env data OAUTH_APPLICATION
-// not good for testing
-//$token = $authenticate->login();
-//$client = new Client();
-//$client->authenticate($token, AuthMethod::ACCESS_TOKEN);
-//$ms = $client->api('issues')->milestones()->all(Utilities::env('GH_ACCOUNT'), "pn0add");
-//var_dump($ms);
-//die();
+$cacheClient = $container->get('Memcached');
 
-// .env data GH_TOKEN
+if('oauth'===strtolower(Utilities::env('GH_AUTH_METHOD'))) {
+    // perform OAuth
+    /** @var \App\KanbanBoard\Authentication $authenticate */
+    $authenticate = $container->get('Authentication');
+    $token = $authenticate->login();
+} elseif( ! empty(Utilities::env('GH_TOKEN'))) {
+    // .env data GH_TOKEN
+    $token = Utilities::env('GH_TOKEN');
+}
+
 $client = new GithubClient(
-    Utilities::env('GH_TOKEN'),
+    $token,
     null,
     AuthMethod::ACCESS_TOKEN,
-    Utilities::env('GH_ACCOUNT')
+    Utilities::env('GH_ACCOUNT'),
+    $cacheClient
 );
-
-//$client->authenticate(Utilities::env('GH_TOKEN'), AuthMethod::ACCESS_TOKEN);
-//$ms = $client->api('issues')->milestones()->all(Utilities::env('GH_ACCOUNT'), "pn0add");
-//var_dump($ms);
-//die();
-
 
 // JWT
 // https://github.com/KnpLabs/php-github-api/blob/master/doc/security.md
@@ -68,14 +72,9 @@ $client = new GithubClient(
 //;
 //
 //$client->authenticate($jwt->toString(), null, Github\AuthMethod::JWT);
-//$ms = $client->api('issues')->milestones()->all(Utilities::env('GH_ACCOUNT'), "pn0add");
-//
-//var_dump($ms);
-//die();
 
-$repositories = explode('|', Utilities::env('GH_REPOSITORIES'));
 
-$app = new Application($client, $repositories, ['waiting-for-feedback','paused']);
+$app = new Application($client, $repositories, $cacheClient, ['waiting-for-feedback','paused']);
 
 $board=$app->board();
 

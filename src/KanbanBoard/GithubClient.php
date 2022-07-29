@@ -21,6 +21,8 @@ class GithubClient implements ClientInterface
 
     private MilestoneModel $milestoneModel;
 
+    private $cacheClient;
+
     /**
      * @param        $tokenOrLogin
      * @param        $password
@@ -31,10 +33,12 @@ class GithubClient implements ClientInterface
         $tokenOrLogin,
         $password = null,
         $authMethod,
-        string $account
-    )
-    {
+        string $account,
+        $cacheClient = null
+    ) {
         $this->account = $account;
+
+        $this->cacheClient = $cacheClient;
 
         $this->client = new Client();
         $this->client->authenticate($tokenOrLogin, $password, $authMethod);
@@ -59,9 +63,16 @@ class GithubClient implements ClientInterface
      */
     public function getMilestones(string $repository): ?array
     {
-        $milestones = $this->issuesApi->milestones()->all($this->account, $repository);
+        $milestones = $this->cacheClient->get($repository . '.milestones.fetch.all');
 
-        return $this->milestoneModel->fetchAll($milestones);
+        if (! $milestones) {
+            $milestones = $this->issuesApi->milestones()->all($this->account, $repository);
+            $milestones = $this->milestoneModel->fetchAll($milestones);
+
+            $this->cacheClient->set($repository . '.milestones.fetch.all', $milestones);
+        }
+
+        return $milestones;
     }
 
     /**
@@ -72,13 +83,29 @@ class GithubClient implements ClientInterface
      *
      * @return null|array
      */
-    public function getIssues(string $repository, string $milestoneId): ?array
+    public function getIssues(string $repository, int $milestoneId): ?array
     {
-        $issueParams = ['milestone' => $milestoneId, 'state' => 'all'];
-        $issues = $this->issuesApi->all($this->account, $repository, $issueParams);
+        $cacheKey = $repository . '.milestone.' . $milestoneId . '.issues.fetch.all.by_status';
 
-        $fetchedIssues = $this->issueModel->fetchAll($issues);
+        $fetchByStatus = $this->cacheClient->get($cacheKey);
 
-        return $this->issueModel->fetchIssuesByStatus($fetchedIssues);
+        if (! $fetchByStatus) {
+            $issueParams = ['milestone' => $milestoneId, 'state' => 'all'];
+
+            $issues = $this->issuesApi->all($this->account, $repository, $issueParams);
+
+            $fetchIssues = $this->issueModel->fetchAll($issues);
+            $fetchByStatus = $this->issueModel->fetchIssuesByStatus($fetchIssues);
+
+            $this->cacheClient->set($cacheKey, $fetchByStatus);
+        }
+
+        return $fetchByStatus;
+    }
+
+    public function rateLimit()
+    {
+        var_dump($this->client->rateLimit());
+        return $this->client->rateLimit();
     }
 }

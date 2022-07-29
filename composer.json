@@ -7,6 +7,7 @@
 	"require": {
 		"ext-curl": "*",
 		"ext-dom": "*",
+		"ext-memcached": "*",
 		"firebase/php-jwt": "dev-main",
 		"guzzlehttp/guzzle": "^7.4",
 		"knplabs/github-api": "^3.0",
@@ -15,7 +16,8 @@
 		"symfony/dotenv": "^6.0",
 		"vierbergenlars/php-semver": "^3.0",
 		"php-di/php-di": "^6.4",
-		"lcobucci/jwt": "^4.1"
+		"lcobucci/jwt": "^4.1",
+		"clickalicious/memcached.php": "^1.0"
 	},
 	"minimum-stability": "dev",
 	"prefer-stable" : true,

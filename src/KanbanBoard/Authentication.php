@@ -28,8 +28,8 @@ class Authentication
         string $clientId,
         string $clientSecret,
         ?string $alg,
-        ?JWT $jwt)
-    {
+        ?JWT $jwt
+    ) {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->alg = $alg;
@@ -137,18 +137,18 @@ class Authentication
     private function returnsFromGithub($code): mixed
     {
         $url = 'https://github.com/login/oauth/access_token';
-        $data = array(
+        $data = [
             'code' => $code,
             'state' => 'LKHYgbn776tgubkjhk',
             'client_id' => Utilities::env("GH_OAUTH_CLIENT_ID"),
-            'client_secret' => Utilities::env("GH_OAUTH_CLIENT_SECRET"));
-        $options = array(
-            'http' => array(
+            'client_secret' => Utilities::env("GH_OAUTH_CLIENT_SECRET")];
+        $options = [
+            'http' => [
                 'method' => 'POST',
                 'header' => "Content-type: application/x-www-form-urlencoded\r\n",
                 'content' => http_build_query($data),
-            ),
-        );
+            ],
+        ];
         $context = stream_context_create($options);
         $result = file_get_contents($url, false, $context);
 

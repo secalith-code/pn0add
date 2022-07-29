@@ -124,7 +124,8 @@ class Utilities
         return $markdown;
     }
 
-    public static function hasValue($array, $key) {
+    public static function hasValue($array, $key)
+    {
         return is_array($array) && array_key_exists($key, $array) && !empty($array[$key]);
     }
 
@@ -149,5 +150,10 @@ class Utilities
         }
 
         return $doc->saveHTML();
+    }
+
+    public static function getRepositoriesNames()
+    {
+        return explode('|', self::env('GH_REPOSITORIES'));
     }
 }

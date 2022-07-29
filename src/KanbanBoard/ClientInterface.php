@@ -17,5 +17,5 @@ interface ClientInterface
      *
      * @return array|null
      */
-    public function getIssues(string $repository, string $milestoneId): ?array;
+    public function getIssues(string $repository, int $milestoneId): ?array;
 }
