@@ -46,34 +46,6 @@ $client = new GithubClient(
     $cacheClient
 );
 
-// JWT
-// https://github.com/KnpLabs/php-github-api/blob/master/doc/security.md
-//use Github\HttpClient\Builder;
-//use Lcobucci\JWT\Configuration;
-//use Lcobucci\JWT\Encoding\ChainedFormatter;
-//use Lcobucci\JWT\Signer\Key\LocalFileReference;
-//use Lcobucci\JWT\Signer\Rsa\Sha256;
-//
-//$builder = new Builder();
-//
-//$client = new Github\Client($builder);
-//
-//$config = Configuration::forSymmetricSigner(
-//    new Sha256(),
-//    LocalFileReference::file(Utilities::env('GH_PEMKEY'))
-//);
-//
-//$now = new \DateTimeImmutable();
-//$jwt = $config->builder(ChainedFormatter::withUnixTimestampDates())
-//    ->issuedBy(Utilities::env('GH_APP_ID'))
-//    ->issuedAt($now)
-//    ->expiresAt($now->modify('+10 minute'))
-//    ->getToken($config->signer(), $config->signingKey())
-//;
-//
-//$client->authenticate($jwt->toString(), null, Github\AuthMethod::JWT);
-
-
 $app = new Application($client, $repositories, $cacheClient, ['waiting-for-feedback','paused']);
 
 $board=$app->board();
