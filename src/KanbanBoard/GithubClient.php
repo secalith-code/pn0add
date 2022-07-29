@@ -40,7 +40,7 @@ class GithubClient implements ClientInterface
         $this->cacheClient = $cacheClient;
 
         $this->client = new Client();
-        $this->client->authenticate($tokenOrLogin, $password, $authMethod);
+        $this->client->authenticate($tokenOrLogin, null, $authMethod);
 
         $this->issuesApi = $this->client->api('issues');
 

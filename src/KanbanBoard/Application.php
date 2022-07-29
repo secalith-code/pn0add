@@ -44,12 +44,12 @@ class Application
      *
      * @return string
      */
-    public function display($template, $data): string
+    public function display($template, $data): ?string
     {
         $m = new Mustache_Engine([
             'loader' => new Mustache_Loader_FilesystemLoader('../views'),
         ]);
 
-        echo $m->render($template, $data);
+        return $m->render($template, $data);
     }
 }
