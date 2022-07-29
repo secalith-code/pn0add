@@ -2,10 +2,6 @@
 
 namespace App\KanbanBoard\Domain;
 
-use App\KanbanBoard\IssueModel;
-use App\KanbanBoard\MilestoneModel;
-use App\Utilities;
-
 class RepositoryModel
 {
 
@@ -21,16 +17,15 @@ class RepositoryModel
         IssueModel $issueModel,
         MilestoneModel $milestoneModel,
         array $repositories
-    )
-    {
-        $this->issueModel=$issueModel;
-        $this->milestoneModel=$milestoneModel;
-        $this->repositories=$repositories;
+    ) {
+        $this->issueModel = $issueModel;
+        $this->milestoneModel = $milestoneModel;
+        $this->repositories = $repositories;
     }
 
     public function getData($client): array
     {
-        $this->client=$client;
+        $this->client = $client;
 
         $data = [
             'milestones' => []
@@ -58,5 +53,4 @@ class RepositoryModel
 
         return $data;
     }
-
 }

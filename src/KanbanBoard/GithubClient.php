@@ -2,10 +2,8 @@
 
 namespace App\KanbanBoard;
 
-use App\KanbanBoard\ClientInterface;
-use App\KanbanBoard\IssueModel;
-use App\KanbanBoard\MilestoneModel;
-use App\Utilities;
+use App\KanbanBoard\Domain\IssueModel;
+use App\KanbanBoard\Domain\MilestoneModel;
 use Github\Api\Issue;
 use Github\Client as Client;
 
@@ -62,9 +60,9 @@ class GithubClient implements ClientInterface
      */
     public function getMilestones(string $repository): ?array
     {
-        if($this->cacheClient) {
+        if ($this->cacheClient) {
             /** @var array $milestones  Try to reach data from cache */
-            $milestones=$this->getMilestonesCached($repository);
+            $milestones = $this->getMilestonesCached($repository);
         } else {
             // Call API
             $milestones = $this->issuesApi->milestones()->all($this->account, $repository);
@@ -109,9 +107,9 @@ class GithubClient implements ClientInterface
     {
         $issueParams = ['milestone' => $milestoneId, 'state' => 'all'];
 
-        if($this->cacheClient) {
+        if ($this->cacheClient) {
             /** @var array $milestones  Try to reach data from cache */
-            $issues=$this->getIssuesCached($repository, $milestoneId, $issueParams);
+            $issues = $this->getIssuesCached($repository, $milestoneId, $issueParams);
         } else {
             // Call API
             $issues = $this->issuesApi->all($this->account, $repository, $issueParams);

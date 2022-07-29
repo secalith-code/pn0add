@@ -118,13 +118,13 @@ class Utilities
     ): ?string {
         $markdown = trim($markdown);
 
-        if(empty($markdown)) {
+        if (empty($markdown)) {
             return null;
         }
 
         $markdown = Markdown::defaultTransform($markdown);
 
-        if($tranformLinksToBlankTarget) {
+        if ($tranformLinksToBlankTarget) {
             $markdown = self::addBlankTargetToHTMLLinks($markdown);
         }
 

@@ -1,8 +1,7 @@
 <?php
 
-namespace App\KanbanBoard;
+namespace App\KanbanBoard\Domain;
 
-use App\KanbanBoard\CommonModel;
 use App\Utilities;
 
 class IssueModel extends CommonModel
