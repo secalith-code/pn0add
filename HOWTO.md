@@ -4,10 +4,14 @@ Requirements:
   * PHP8.1 with ext-dom and ext-curl
   * Optionally supports Memcached with ext-memcached
 
-Unzip the package
-
-Copy `.env.dist` as `.env.` and change the values.
-Change the values depending on Authentication way[#15.
+## HOWTO
+* Unzip the package
+* Copy `.env.dist` as `.env.` and change the values. Change the values depending on Authentication way. See `Authentication` section below
+* run `composer install`
+ 
+```shell
+$ composer run start
+```
 
 For Webserver instructions see [WEBSERVERS.md](WEBSERVERS.md)
 
