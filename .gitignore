@@ -4,3 +4,4 @@ var/log/*
 vendor
 .env
 var/pem/*.pem
+var/tmp/*
