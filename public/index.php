@@ -40,7 +40,6 @@ if('oauth'===strtolower(Utilities::env('GH_AUTH_METHOD'))) {
 
 $client = new GithubClient(
     $token,
-    null,
     AuthMethod::ACCESS_TOKEN,
     Utilities::env('GH_ACCOUNT'),
     $cacheClient

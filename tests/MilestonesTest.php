@@ -31,7 +31,6 @@ final class MilestonesTest extends TestCase
 
         $client = new GithubClient(
             Utilities::env('GH_TOKEN'),
-            null,
             AuthMethod::ACCESS_TOKEN,
             Utilities::env('GH_ACCOUNT')
         );

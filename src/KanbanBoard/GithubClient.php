@@ -25,13 +25,12 @@ class GithubClient implements ClientInterface
 
     /**
      * @param        $tokenOrLogin
-     * @param        $password
      * @param        $authMethod
      * @param string $account
+     * @param        $cacheClient
      */
     public function __construct(
         $tokenOrLogin,
-        $password = null,
         $authMethod,
         string $account,
         $cacheClient = null
