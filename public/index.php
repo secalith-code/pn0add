@@ -51,4 +51,4 @@ $app = new Application($client, $repositoriesData, $cacheClient, ['waiting-for-f
 
 $board=$app->board();
 
-$app->display('index',$board);
+echo $app->display('index',$board);

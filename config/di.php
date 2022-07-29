@@ -2,7 +2,7 @@
 
 use App\KanbanBoard\Authentication;
 use App\Utilities;
-use Clickalicious\Memcached\Client as CacheAdapter;
+use Clickalicious\Memcached\Client as MemcachedCacheAdapter;
 use DI\Container;
 use function DI\env as env;
 use App\KanbanBoard\Domain\RepositoryModel;
@@ -29,15 +29,15 @@ return [
             'repositories',
             DI\get('gh.repositories')
         ),
-    'Memcached' => function (Container $c) {
+    'MemcachedCacheAdapter' => DI\autowire(MemcachedCacheAdapter::class)
+        ->constructorParameter('host', DI\get('mcached.host')
+        )->constructorParameter('port', DI\get('mcached.port')
+        )->constructorParameter('timeout',DI\get('mcached.exp')
+        )
+    ,
+    'CacheAdapter' => function (Container $c) {
         if(Utilities::env('MCACHED_ENABLED')) {
-            $client = new CacheAdapter(
-                Utilities::env('MCACHED_HOST'),
-                (int) Utilities::env('MCACHED_PORT'),
-                (int) Utilities::env('MCACHED_EXP')
-            );
-
-            return $client;
+            return $c->get('MemcachedCacheAdapter');
         }
 
         return false;
