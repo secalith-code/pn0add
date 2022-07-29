@@ -4,20 +4,14 @@ namespace App\KanbanBoard;
 
 use App\Utilities;
 use Exception;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-use OpenSSLAsymmetricKey;
 
 class Authentication
 {
-
-    private ?string $alg;
-
+    /** @var string $clientId   Should be set in .env file as GH_CLIENT_ID */
     private string $clientId;
 
+    /** @var string $clientSecret   Should be set in .env file as GH_CLIENT_SECRET */
     private string $clientSecret;
-
-    private JWT $JWT;
 
     /**
      * @param string      $clientId
@@ -26,59 +20,10 @@ class Authentication
      */
     public function __construct(
         string $clientId,
-        string $clientSecret,
-        ?string $alg,
-        ?JWT $jwt
+        string $clientSecret
     ) {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
-        $this->alg = $alg;
-        $this->JWT = $jwt;
-    }
-
-    /**
-     * @return OpenSSLAsymmetricKey
-     * @throws Exception
-     */
-    public function getPrivateKey(): OpenSSLAsymmetricKey
-    {
-        try {
-            if (! file_exists(Utilities::env('GH_PEMKEY'))) {
-                throw new Exception('your PEM file location is incorrect.');
-            }
-
-            return openssl_pkey_get_private(
-                file_get_contents(Utilities::env('GH_PEMKEY')),
-                Utilities::env('GH_PEMKEY_PASSPHRASE')
-            );
-        } catch (Exception $e) {
-            die($e->getMessage());
-        }
-    }
-
-    /**
-     * @return string
-     * @throws Exception
-     */
-    public function getJWT(): string
-    {
-        return $this->JWT::encode(
-            $this->getJWTPayload(),
-            $this->getPrivateKey(),
-            $this->alg
-        );
-    }
-
-    /**
-     * @return array
-     */
-    private function getJWTPayload(): array
-    {
-        return [
-            'iss' => Utilities::env('GH_CLIENT_ID'),
-            'iat' => time() - 10,
-            'exp' => time() + (10 * 60)
-        ];
     }
 
     /**
@@ -122,7 +67,7 @@ class Authentication
     private function redirectToGithub(): void
     {
         $url = 'Location: https://github.com/login/oauth/authorize';
-        $url .= '?client_id=' . Utilities::env("GH_OAUTH_CLIENT_ID");
+        $url .= '?client_id=' . $this->clientId;
         $url .= '&scope=repo';
         $url .= '&state=LKHYgbn776tgubkjhk';
         header($url);
@@ -140,8 +85,9 @@ class Authentication
         $data = [
             'code' => $code,
             'state' => 'LKHYgbn776tgubkjhk',
-            'client_id' => Utilities::env("GH_OAUTH_CLIENT_ID"),
-            'client_secret' => Utilities::env("GH_OAUTH_CLIENT_SECRET")];
+            'client_id' => $this->clientId,
+            'client_secret' => $this->clientSecret
+        ];
         $options = [
             'http' => [
                 'method' => 'POST',
@@ -149,6 +95,7 @@ class Authentication
                 'content' => http_build_query($data),
             ],
         ];
+
         $context = stream_context_create($options);
         $result = file_get_contents($url, false, $context);
 
