@@ -16,21 +16,16 @@ class Application
 
     public ?array $paused_labels;
 
-    protected array $repositories;
+    protected $repositoryModel;
 
-    /**
-     * @param ClientInterface $client
-     * @param array           $repositories
-     * @param array|null      $paused_labels
-     */
     public function __construct(
         ClientInterface $client,
-        array $repositories,
+        $repositoryModel,
         $cacheClient = null,
         ?array $paused_labels = []
     ) {
         $this->client = $client;
-        $this->repositories = $repositories;
+        $this->repositoryModel = $repositoryModel;
         $this->cacheClient = $cacheClient;
         $this->paused_labels = $paused_labels;
     }
@@ -40,29 +35,7 @@ class Application
      */
     public function board(): array
     {
-        $data = [];
-
-        if (! empty($this->repositories)) {
-            foreach ($this->repositories as $repositoryName) {
-                $milestones = $this->client->getMilestones($repositoryName);
-
-                if (! empty($milestones)) {
-                    foreach ($milestones as $ms) {
-                        $issues = $this->client->getIssues(
-                            $repositoryName,
-                            $ms['number']
-                        );
-
-                        $data[] = [
-                            'data' => $ms,
-                            'issues' => $issues,
-                        ];
-                    }
-                }
-            }
-        }
-
-        return ['milestones' => $data];
+        return $this->repositoryModel->getData($this->client);
     }
 
     /**

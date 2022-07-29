@@ -5,10 +5,16 @@ use App\Utilities;
 use Clickalicious\Memcached\Client as CacheAdapter;
 use DI\Container;
 use function DI\env as env;
+use App\KanbanBoard\Domain\RepositoryModel;
+
 
 return [
     'gh.client.id' => env('GH_CLIENT_ID'),
     'gh.client.secret' => env('GH_CLIENT_SECRET'),
+    'mcached.status' => env('MCACHED_ENABLED'),
+    'mcached.host' => env('MCACHED_HOST'),
+    'mcached.port' => env('MCACHED_PORT'),
+    'mcached.exp' => env('MCACHED_EXP'),
     'gh.repositories' => function () {
         return Utilities::getRepositoriesNames();
     },
@@ -18,6 +24,11 @@ return [
             $c->get('gh.client.secret'),
         );
     },
+    'RepositoryModel' => DI\autowire(RepositoryModel::class)
+        ->constructorParameter(
+            'repositories',
+            DI\get('gh.repositories')
+        ),
     'Memcached' => function (Container $c) {
         if(Utilities::env('MCACHED_ENABLED')) {
             $client = new CacheAdapter(

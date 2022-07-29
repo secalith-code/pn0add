@@ -26,7 +26,9 @@ $authenticate = $container->get('Authentication');
 /** @var array $repositories */
 $repositories = $container->get('gh.repositories');
 
-$cacheClient = $container->get('Memcached');
+$cacheClient = $container->get('CacheAdapter');
+
+$repositoriesData = $container->get('RepositoryModel');
 
 if('oauth'===strtolower(Utilities::env('GH_AUTH_METHOD'))) {
     // perform OAuth
@@ -45,7 +47,7 @@ $client = new GithubClient(
     $cacheClient
 );
 
-$app = new Application($client, $repositories, $cacheClient, ['waiting-for-feedback','paused']);
+$app = new Application($client, $repositoriesData, $cacheClient, ['waiting-for-feedback','paused']);
 
 $board=$app->board();
 

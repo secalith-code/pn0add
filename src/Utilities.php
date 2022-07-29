@@ -114,14 +114,23 @@ class Utilities
      */
     public static function fetchMarkdownToHTML(
         ?string $markdown,
-        bool $tranformLinksToBlankTarget = false
+        bool $tranformLinksToBlankTarget = true
     ): ?string {
         $markdown = trim($markdown);
-        $markdown = nl2br($markdown);
-        $markdown = Markdown::defaultTransform($markdown);
-        $markdown = self::addBlankTargetToHTMLLinks($markdown);
 
-        return $markdown;
+        if(empty($markdown)) {
+            return null;
+        }
+
+        $markdown = Markdown::defaultTransform($markdown);
+
+        if($tranformLinksToBlankTarget) {
+            $markdown = self::addBlankTargetToHTMLLinks($markdown);
+        }
+
+        $markdown = trim(preg_replace('/\s+/', ' ', $markdown));
+
+        return trim($markdown);
     }
 
     public static function hasValue($array, $key)
